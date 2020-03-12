@@ -1,6 +1,6 @@
 {
   "name": "@parkingboss/utils",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Parking Boss Utilities",
   "main": "dist/cjs/index.js",
   "module": "dist/es6/index.js",
@@ -39,5 +39,7 @@
     "lodash-es": "^4.17.15",
     "store": "^2.0.12"
   },
-  "files": [ "dist" ]
+  "files": [
+    "dist"
+  ]
 }
