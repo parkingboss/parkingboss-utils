@@ -1,1 +1,3 @@
-export * from './urls';
+import * as urls from './urls';
+
+export { urls }
