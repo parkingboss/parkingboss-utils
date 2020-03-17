@@ -10,13 +10,12 @@
     "experimentalDecorators": false,
     "emitDecoratorMetadata": false,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./", // Override in tsconfig.cjs.json
+    "outDir": "es6", // Override in tsconfig.cjs.json
     "declaration": true,
     "lib": [ "DOM", "ESNext", "DOM.Iterable" ]
   },
   "include": [
     "src/**/*"
   ],
-  "exclude": [],
   "compileOnSave": true
 }

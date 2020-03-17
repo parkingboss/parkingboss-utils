@@ -3,11 +3,11 @@
   "version": "0.5.3",
   "description": "Parking Boss Utilities",
   "main": "cjs/index.js",
-  "module": "./index.js",
+  "module": "es6/index.js",
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch --notify --coverage",
-    "clean": "rm -rf *js *.d.ts cjs",
+    "clean": "rm -rf es6 cjs",
     "build:esm": "tsc",
     "build:cjs": "tsc --project tsconfig.cjs.json",
     "build": "run-p build:*",
