@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch --notify --coverage",
-    "clean": "rm -rf dist types",
+    "clean": "rm -rf *js *.d.ts cjs",
     "build:esm": "tsc",
     "build:cjs": "tsc --project tsconfig.cjs.json",
     "build": "run-p build:*",
