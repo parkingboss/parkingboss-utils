@@ -2,8 +2,8 @@
   "name": "@parkingboss/utils",
   "version": "0.4.10",
   "description": "Parking Boss Utilities",
-  "main": "dist/cjs/index.js",
-  "module": "dist/es6/index.js",
+  "main": "cjs/index.js",
+  "module": "index.js",
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch --notify --coverage",
@@ -43,8 +43,5 @@
     "jwt-decode": "^2.2.0",
     "lodash-es": "^4.17.15",
     "store": "^2.0.12"
-  },
-  "files": [
-    "dist"
-  ]
+  }
 }

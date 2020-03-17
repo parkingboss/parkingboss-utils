@@ -1,3 +1,6 @@
 node_modules/
 dist/
+cjs/
 coverage/
+/*js
+/*.d.ts
