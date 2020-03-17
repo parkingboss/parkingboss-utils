@@ -1,6 +1,6 @@
 {
   "name": "@parkingboss/utils",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Parking Boss Utilities",
   "main": "dist/cjs/index.js",
   "module": "dist/es6/index.js",
