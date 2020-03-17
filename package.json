@@ -3,7 +3,7 @@
   "version": "0.5.2",
   "description": "Parking Boss Utilities",
   "main": "cjs/index.js",
-  "module": "index.js",
+  "module": "./index.js",
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch --notify --coverage",
@@ -20,6 +20,11 @@
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/parkingboss/parkingboss-utils.git"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "coverageReporters": [ "json", "html" ]
   },
   "keywords": [
     "Parking Boss",
