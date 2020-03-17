@@ -1,6 +1,6 @@
 {
   "name": "@parkingboss/utils",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Parking Boss Utilities",
   "main": "cjs/index.js",
   "module": "./index.js",
@@ -24,7 +24,10 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "coverageReporters": [ "json", "html" ]
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
   },
   "keywords": [
     "Parking Boss",
