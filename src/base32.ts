@@ -11,7 +11,7 @@ const toAlphabet: { [key in HexVariants]: string } = {
   Crockford: CROCKFORD,
 };
 
-export function toHex(variant: HexVariants = "Crockford") {
+export function makeToHex(variant: HexVariants = "Crockford") {
   const alphabet: string | undefined = toAlphabet[variant];
   if (!alphabet) {
     throw new Error('Unknown base32 variant: ' + variant);
@@ -63,4 +63,4 @@ export function toHex(variant: HexVariants = "Crockford") {
   }
 }
 
-export const crockford32ToHex = toHex('Crockford');
+export const crockford32ToHex = makeToHex('Crockford');

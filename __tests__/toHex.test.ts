@@ -1,8 +1,8 @@
-import { toHex, crockford32ToHex, HexVariants } from '../src/base32';
+import { makeToHex, crockford32ToHex, HexVariants } from '../src/base32';
 
 test('makeToHex returns function', () => {
   ['Crockford', 'RFC3548', 'RFC4648', 'RFC4648-HEX'].forEach(val => {
-    expect(toHex(val as HexVariants)).toBeInstanceOf(Function);
+    expect(makeToHex(val as HexVariants)).toBeInstanceOf(Function);
   });
 });
 
@@ -11,6 +11,6 @@ test('makeToHex function decodes', () => {
 });
 
 test('bad hex variant throws error', () => {
-  const makeBadHexVariant = () => toHex('test' as HexVariants);
+  const makeBadHexVariant = () => makeToHex('test' as HexVariants);
   expect(makeBadHexVariant).toThrow();
 });
