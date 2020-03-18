@@ -1,4 +1,4 @@
-import * as qs from '../../src/querystring';
+import * as qs from '../../src/qs';
 
 test('parse handles empty', () => {
   expect(qs.parse(''))

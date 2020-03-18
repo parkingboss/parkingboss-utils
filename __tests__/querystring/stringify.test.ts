@@ -1,4 +1,4 @@
-import * as qs from '../../src/querystring';
+import * as qs from '../../src/qs';
 
 test('stringify works with one key', () => {
   expect(qs.stringify({ test: 'value' }))
