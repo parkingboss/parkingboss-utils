@@ -1,4 +1,4 @@
-import { infotag } from '../src/infotag';
+import { parse } from '../src/infotag';
 
 const newStyleDecal = 'https://scanme.io/1/QSJBZJRREN2FXAV94HN5N2YX04/2312001/D';
 const warningSticker = 'https://scanme.io?w=zTLLo8byeEOwdDi6cVgUTg';
@@ -9,13 +9,13 @@ const shortId = 'http://qr.parkiq.io/l/507northgate?qr=magn';
 
 test('all samples parse', () => {
   [newStyleDecal, warningSticker, inactiveDecal, signAttendant, magnetAttendant].forEach(sample => {
-    const tag = infotag(sample);
+    const tag = parse(sample);
     expect(tag).not.toBeNull();
   });
 });
 
 test('one works as expected', () => {
-  const tag = infotag(newStyleDecal);
+  const tag = parse(newStyleDecal);
   expect(tag).toStrictEqual({
     format: 'media',
     id: 'be64bfcb187544feab69246a5a8bdd01',
@@ -27,7 +27,7 @@ test('one works as expected', () => {
 });
 
 test('two works as expected', () => {
-  const tag = infotag(warningSticker);
+  const tag = parse(warningSticker);
   expect(tag).toStrictEqual({
     format: 'warning',
     id: 'zTLLo8byeEOwdDi6cVgUTg',
@@ -36,7 +36,7 @@ test('two works as expected', () => {
 });
 
 test('three works as expected', () => {
-  const tag = infotag(inactiveDecal);
+  const tag = parse(inactiveDecal);
   expect(tag).toStrictEqual({
     format: 'media',
     id: 'yeAI2vMQrECBwYfkfi1nXg',
@@ -45,7 +45,7 @@ test('three works as expected', () => {
 });
 
 test('four works as expected', () => {
-  const tag = infotag(signAttendant);
+  const tag = parse(signAttendant);
   expect(tag).toStrictEqual({
     format: 'sign',
     id: 'lvt1vBSAyUmxZTowNPJURQ',
@@ -54,7 +54,7 @@ test('four works as expected', () => {
 });
 
 test('five works as expected', () => {
-  const tag = infotag(magnetAttendant);
+  const tag = parse(magnetAttendant);
   expect(tag).toStrictEqual({
     format: 'magn',
     id: 'hmdqSVlQ0USCMBdbR1myBA',
@@ -64,7 +64,7 @@ test('five works as expected', () => {
 
 
 test('shortId works as expected', () => {
-  const tag = infotag(shortId);
+  const tag = parse(shortId);
   expect(tag).toStrictEqual({
     format: 'magn',
     id: '507northgate',

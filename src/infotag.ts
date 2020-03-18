@@ -1,5 +1,6 @@
 import { crockford32ToHex } from './base32';
-import { ParsedUrl, parse } from './querystring';
+
+import { ParsedUrl, parse as parseQs } from './querystring';
 
 export interface Infotag {
   type?: 'infotag';
@@ -73,7 +74,7 @@ function extractV0(uri: string, querystring: URLSearchParams): Infotag | null {
 
   if (!uri && !querystring) return null;
 
-  const query: ParsedUrl = parse(querystring) || {};
+  const query: ParsedUrl = parseQs(querystring) || {};
 
   // handle query version first
   if (!!query.l) {
@@ -172,11 +173,10 @@ function extract(path: string, query: URLSearchParams) {
   return extractV1(path) || extractV0(path, query);
 }
 
-export function infotag(url: string | URL) {
+export function parse(url: string | URL) {
   if (typeof url === "string") {
     url = new URL(url);
   }
   return extract(url.pathname, url.searchParams);
 }
 
-export default infotag;

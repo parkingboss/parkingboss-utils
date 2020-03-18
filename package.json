@@ -5,6 +5,7 @@
   "main": "cjs/index.js",
   "module": "es6/index.js",
   "scripts": {
+    "pretest": "npm run clean && npm run build",
     "test": "jest --coverage",
     "test:watch": "jest --watch --notify --coverage",
     "clean": "rm -rf es6 cjs",
@@ -15,6 +16,7 @@
     "dev:cjs": "tsc -w --project tsconfig.cjs.json",
     "dev": "run-p dev:*",
     "prepare": "run-s clean build",
+    "preversion": "npm run test",
     "postversion": "git push && git push --tags && npm publish --access=public"
   },
   "repository": {
