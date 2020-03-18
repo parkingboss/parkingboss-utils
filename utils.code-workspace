@@ -9,8 +9,6 @@
 			"*js": true,
 			"*.d.ts": true,
 			"node_modules": true,
-			"cjs": true,
-			"coverage": true
 		},
 		"editor.tabSize": 2,
 		"editor.insertSpaces": true,

@@ -1,6 +1,6 @@
 import { crockford32ToHex } from './base32';
 
-import { ParsedUrl, parse as parseQs } from './querystring';
+import { ParsedUrl, parse as parseQs } from './qs';
 
 export interface Infotag {
   type?: 'infotag';
