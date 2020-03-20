@@ -14,7 +14,7 @@ export interface UrlOpts {
 export type UrlLike = string | URL | Location;
 
 function isUrlLike(x: any): x is UrlLike {
-  return typeof x != 'string' && !(x instanceof URL) && !(x instanceof Location);
+  return (typeof x == 'string') || (x instanceof URL) || (x instanceof Location);
 }
 
 export function build(url: UrlLike): string;
