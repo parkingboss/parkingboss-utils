@@ -1,4 +1,5 @@
 function urlToPath(url: URL, includeHash = true) {
+  return url.href;
   const { pathname, search, hash } = url;
   return pathname + search + (includeHash && url.hash ? hash : '');
 }
