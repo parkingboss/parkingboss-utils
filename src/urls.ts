@@ -22,7 +22,7 @@ export function build(opts: UrlOpts): string;
 export function build(url: UrlLike, opts: UrlOpts): string;
 export function build(urlOrOpt: UrlLike | UrlOpts, maybeOpt?: UrlOpts): string {
   const urlArg: UrlLike = isUrlLike(urlOrOpt) ? urlOrOpt : self.location;
-  const opts: UrlOpts = maybeOpt || isUrlLike(urlOrOpt) ? {} : urlOrOpt;
+  const opts: UrlOpts = maybeOpt || (isUrlLike(urlOrOpt) ? {} : urlOrOpt);
 
   const base = opts.absolute ? undefined : opts.base || document.baseURI;
   const url = urlArg instanceof URL
