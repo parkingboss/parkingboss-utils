@@ -24,7 +24,7 @@ export function position(opts: PositionOptions) {
   });
 }
 
-export function watch(success: PositionCallback, failure: PositionErrorCallback, opts: PositionOptions) {
+export function watch(success: PositionCallback, failure?: PositionErrorCallback, opts?: PositionOptions) {
   const id = navigator.geolocation.watchPosition(success, failure, opts);
   return () => navigator.geolocation.clearWatch(id);
 }
