@@ -6,3 +6,4 @@ export * as image from './image';
 export * as support from './support';
 export * as gps from './gps';
 export * as uuid from './uuid';
+export * from './classes';
