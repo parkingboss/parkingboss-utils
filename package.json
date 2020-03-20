@@ -5,16 +5,19 @@
   "main": "cjs/index.js",
   "module": "es6/index.js",
   "scripts": {
-    "pretest": "npm run clean && npm run build",
+    "pretest": "run-s clean build",
     "test": "jest --coverage",
     "test:watch": "jest --watch --notify --coverage",
-    "clean": "rm -rf es6 cjs",
+    "clean:esm": "rm -rf esm",
+    "clean:cjs": "rm -rf cjs",
+    "clean:coverage": "rm -rf coverage",
+    "clean": "run-p clean:*",
     "build:esm": "tsc",
     "build:cjs": "tsc --project tsconfig.cjs.json",
     "build": "run-p build:*",
     "dev:esm": "tsc -w",
     "dev:cjs": "tsc -w --project tsconfig.cjs.json",
-    "dev": "run-p dev:*",
+    "dev": "run-p dev:* test:watch",
     "prepare": "run-s clean build",
     "preversion": "npm run test",
     "postversion": "git push && git push --tags && npm publish --access=public"
@@ -52,10 +55,6 @@
   },
   "dependencies": {
     "base64-js": "^1.3.1",
-    "date-fns": "^2.10.0",
-    "jwt-decode": "^2.2.0",
-    "lodash-es": "^4.17.15",
-    "store": "^2.0.12",
     "uuid-parse": "^1.1.0"
   },
   "files": [
