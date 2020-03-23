@@ -28,7 +28,9 @@ function pathString(path: string) {
 const formats: Record<string, string> = {
   "w": "warning",
   "warn": "warning",
+  "warning":"warning",
   "d": "media",
+  "media":"media",
   "noti": "notice",
   "magn": "magnet",
   "not": "notice",
@@ -41,7 +43,7 @@ const formats: Record<string, string> = {
 const refs: Record<string, string> = {
 
   "d": "media",
-
+  "media":"media",
   "warning": "violation",
   "v": "violation",
   "w": "violation",
@@ -90,10 +92,20 @@ function extractV0(uri: string, querystring: URLSearchParams): Infotag | null {
     format: "media",
     id: query.d as string
   };
+  if (!!query.media) return {
+    ref: "media",
+    format: "media",
+    id: query.media as string
+  };
   if (!!query.p) return {
     ref: "permit",
     format: "pass",
-    id: query.p as string
+    id: query.permit as string
+  };
+  if (!!query.permit) return {
+    ref: "permit",
+    format: "pass",
+    id: query.permit as string
   };
   if (!!query.m) return {
     ref: "address",
@@ -105,6 +117,11 @@ function extractV0(uri: string, querystring: URLSearchParams): Infotag | null {
     ref: "violation",
     format: "warning",
     id: query.w as string
+  };
+  if (!!query.warning) return {
+    ref: "violation",
+    format: "warning",
+    id: query.warning as string
   };
 
   var path = uri.split('/');
