@@ -1,15 +1,24 @@
-function urlToPath(url: URL, includeHash = true) {
-  return url.href;
-  const { pathname, search, hash } = url;
-  return pathname + search + (includeHash && url.hash ? hash : '');
+export interface URLToPathOpts {
+  skipHash?: boolean,
+  absolute?: boolean,
+}
+
+function urlToPath(url: URL, opts: URLToPathOpts = {}) {
+  const copied = new URL(url.href);
+
+  if (opts.skipHash) {
+    copied.hash = '';
+  }
+
+  // Reminder: replace only replaces the first copy unless the first argument is a global regex
+  return copied.href.replace(copied.origin, opts.absolute ? copied.origin : '');
 }
 
 export interface UrlOpts {
   query?: Record<string, null | string | string[]>;
-  hash?: string;
+  hash?: string | false;
   absolute?: true;
   login?: true;
-  base?: string;
 }
 
 export type UrlLike = string | URL | Location;
@@ -24,11 +33,7 @@ export function build(url: UrlLike, opts: UrlOpts): string;
 export function build(urlOrOpt: UrlLike | UrlOpts, maybeOpt?: UrlOpts): string {
   const urlArg: UrlLike = isUrlLike(urlOrOpt) ? urlOrOpt : self.location;
   const opts: UrlOpts = maybeOpt || (isUrlLike(urlOrOpt) ? {} : urlOrOpt);
-
-  const base = opts.absolute ? undefined : opts.base || document.baseURI;
-  const url = urlArg instanceof URL
-    ? urlArg
-    : new URL(urlArg.toString(), base);
+  const url = new URL(urlArg.toString(), document.baseURI);
 
   Object.entries(opts.query || {})
     .forEach(([key, val]) => {
@@ -49,9 +54,14 @@ export function build(urlOrOpt: UrlLike | UrlOpts, maybeOpt?: UrlOpts): string {
     url.hash = opts.hash;
   }
 
-  const requestedPath = urlToPath(url);
+  const requestedPath = urlToPath(url, { skipHash: opts.hash === false, absolute: opts.login || opts.absolute });
 
-  return opts.login
-    ? `https://my.parkingboss.com/user/navigate?url=${requestedPath}`
-    : requestedPath;
+  if (opts.login) {
+    return build('https://my.parkingboss.com/user/navigate', {
+      query: { url: requestedPath },
+      absolute: true,
+    });
+  }
+
+  return requestedPath;
 }

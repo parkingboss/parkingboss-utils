@@ -1,13 +1,12 @@
-export type ParsedUrl = Record<string, string | string[]>;
+import { ensureArray } from './arrays';
+
+export type ParsedUrl = Record<string, null | string | string[]>;
 
 export function toSearchParams(urlStr: string): URLSearchParams {
   try {
     return new URL(urlStr).searchParams;
   } catch (err) {
-    if (!urlStr.startsWith("?")) {
-      urlStr = '?' + urlStr;
-    }
-    return new URL("http://localhost:1000" + urlStr).searchParams;
+    return new URLSearchParams(urlStr);
   }
 }
 
@@ -31,13 +30,13 @@ export function parse(url: URLSearchParams | URL | string): ParsedUrl {
 }
 
 export function stringify(obj: ParsedUrl): string {
-  const url = new URL("http://localhost:1000");
+  const searchParams = new URLSearchParams("?");
   Object.entries(obj).forEach(([key, val]) => {
     if (typeof val === 'string') {
-      url.searchParams.set(key, val);
-    } else {
-      val.forEach(v => url.searchParams.append(key, v));
+      searchParams.set(key, val);
+    } else if (val != null) {
+      val.forEach(v => searchParams.append(key, v));
     }
   });
-  return url.searchParams.toString();
+  return searchParams.toString();
 }
