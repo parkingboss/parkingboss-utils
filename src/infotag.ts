@@ -194,6 +194,7 @@ export function parse(url: string | URL) {
   if (typeof url === "string") {
     url = new URL(url);
   }
+
   return extract(url.pathname, url.searchParams);
 }
 
