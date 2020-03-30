@@ -35,7 +35,11 @@ export function stringify(obj: ParsedUrl): string {
     if (typeof val === 'string') {
       searchParams.set(key, val);
     } else if (val != null) {
-      val.forEach(v => searchParams.append(key, v));
+      if (typeof val.forEach === 'function') {
+        val.forEach(v => searchParams.append(key, v));
+      } else {
+        searchParams.set(key, val.toString());
+      }
     }
   });
   return searchParams.toString();
