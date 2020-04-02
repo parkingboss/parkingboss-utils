@@ -8,7 +8,7 @@ export interface Infotag {
   format: string;
   serial?: string;
   version?: string;
-  id: string;
+  id?: string;
 }
 
 // convert crockford32 ids to guid hex
@@ -38,6 +38,7 @@ const formats: Record<string, string> = {
   "sig": "sign",
   "p": "pass",
   "m": "map"
+  "vehicle": "vehicle"
 };
 
 const refs: Record<string, string> = {
@@ -48,6 +49,7 @@ const refs: Record<string, string> = {
   "v": "violation",
   "w": "violation",
   "warn": "violation",
+  "vehicle":"vehicle",
 
   "sign": "location",
   "sig": "location",
@@ -96,6 +98,12 @@ function extractV0(uri: string, querystring: URLSearchParams): Infotag | null {
     ref: "media",
     format: "media",
     id: query.media as string
+  };
+  if (!!query.vehicle) return {
+    ref: "vehicle",
+    format: "vehicle",
+    id: (query.vehicle as string).length > 10 ? query.vehicle as string : undefined,
+    serial: (query.vehicle as string).length > 10 ? undefined : query.vehicle as string,
   };
   if (!!query.p) return {
     ref: "permit",
