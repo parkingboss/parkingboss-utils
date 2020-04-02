@@ -37,7 +37,7 @@ const formats: Record<string, string> = {
   "mag": "magnet",
   "sig": "sign",
   "p": "pass",
-  "m": "map"
+  "m": "map",
   "vehicle": "vehicle"
 };
 
