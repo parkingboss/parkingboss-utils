@@ -200,9 +200,8 @@ function extract(path: string, query: URLSearchParams) {
 
 export function parse(url: string | URL) {
   if (typeof url === "string") {
-    url = new URL(url);
+    url = new URL(url, 'http://localhost');
   }
 
   return extract(url.pathname, url.searchParams);
 }
-

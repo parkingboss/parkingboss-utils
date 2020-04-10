@@ -6,6 +6,8 @@ const inactiveDecal = 'https://scanme.io?d=yeAI2vMQrECBwYfkfi1nXg';
 const signAttendant = 'https://scanme.io?l=lvt1vBSAyUmxZTowNPJURQ&qr=sign';
 const magnetAttendant = 'http://qr.parkiq.io/l/hmdqSVlQ0USCMBdbR1myBA?qr=magn';
 const shortId = 'http://qr.parkiq.io/l/507northgate?qr=magn';
+const relativeNewStyleDecal = '/1/QSJBZJRREN2FXAV94HN5N2YX04/2312001/D';
+const relativeWarningSticker = '?w=zTLLo8byeEOwdDi6cVgUTg';
 
 test('all samples parse', () => {
   [newStyleDecal, warningSticker, inactiveDecal, signAttendant, magnetAttendant].forEach(sample => {
@@ -14,7 +16,7 @@ test('all samples parse', () => {
   });
 });
 
-test('one works as expected', () => {
+test('new decal works as expected', () => {
   const tag = parse(newStyleDecal);
   expect(tag).toStrictEqual({
     format: 'media',
@@ -26,7 +28,7 @@ test('one works as expected', () => {
   });
 });
 
-test('two works as expected', () => {
+test('warning sticker works as expected', () => {
   const tag = parse(warningSticker);
   expect(tag).toStrictEqual({
     format: 'warning',
@@ -35,7 +37,7 @@ test('two works as expected', () => {
   });
 });
 
-test('three works as expected', () => {
+test('inactive decal works as expected', () => {
   const tag = parse(inactiveDecal);
   expect(tag).toStrictEqual({
     format: 'media',
@@ -44,7 +46,7 @@ test('three works as expected', () => {
   });
 });
 
-test('four works as expected', () => {
+test('attendant sign works as expected', () => {
   const tag = parse(signAttendant);
   expect(tag).toStrictEqual({
     format: 'sign',
@@ -53,7 +55,7 @@ test('four works as expected', () => {
   });
 });
 
-test('five works as expected', () => {
+test('attendant magnet works as expected', () => {
   const tag = parse(magnetAttendant);
   expect(tag).toStrictEqual({
     format: 'magn',
@@ -69,5 +71,26 @@ test('shortId works as expected', () => {
     format: 'magn',
     id: '507northgate',
     ref: 'location',
+  });
+});
+
+test('relative new decal works as expected', () => {
+  const tag = parse(relativeNewStyleDecal);
+  expect(tag).toStrictEqual({
+    format: 'media',
+    id: 'be64bfcb187544feab69246a5a8bdd01',
+    ref: 'media',
+    serial: '2312001',
+    type: 'infotag',
+    version: '1',
+  });
+});
+
+test('relative warning sticker works as expected', () => {
+  const tag = parse(relativeWarningSticker);
+  expect(tag).toStrictEqual({
+    format: 'warning',
+    id: 'zTLLo8byeEOwdDi6cVgUTg',
+    ref: 'violation',
   });
 });
