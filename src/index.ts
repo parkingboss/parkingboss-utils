@@ -8,3 +8,4 @@ export * as gps from './gps';
 export * as uuid from './uuid';
 export * from './classes';
 export * from './promise';
+export * from './arrays';
