@@ -6,6 +6,7 @@ export * as image from './image';
 export * as imgx from './imgx';
 export * as file from './file';
 export * as support from './support';
+export * as dateformat from './dateformat';
 export * as gps from './gps';
 export * as uuid from './uuid';
 export * from './classes';
