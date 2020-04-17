@@ -9,6 +9,7 @@ export * as support from './support';
 export * as dateformat from './dateformat';
 export * as gps from './gps';
 export * as uuid from './uuid';
+
 export * from './date';
 export * from './classes';
 export * from './promise';
