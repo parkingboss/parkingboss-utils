@@ -12,3 +12,4 @@ export * as uuid from './uuid';
 export * from './classes';
 export * from './promise';
 export * from './arrays';
+export * from './ms';
