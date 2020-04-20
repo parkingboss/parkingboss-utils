@@ -5,7 +5,7 @@ export const long = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
   hour: "numeric",
   minute: "numeric",
-}).format;
+});
 
 export const med = new Intl.DateTimeFormat("en-US", {
   year: undefined,
