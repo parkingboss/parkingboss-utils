@@ -1,29 +1,20 @@
-import { parse, end, toSeconds, Duration } from 'iso8601-duration';
+import { parse, end, toSeconds, Duration, pattern } from 'iso8601-duration';
 
-type CountdownTarget = { to: string | Date } | { for: string | Duration };
-
-interface CountdownBuckets {
+interface CountdownConfig {
   [duration: string]: string;
 }
-
-export type CountdownConfig = CountdownBuckets & CountdownTarget;
 
 type Action = () => void;
 type Canceller = Action;
 
 export type CancellablePromise<T = void> = { cancel: Canceller, done: Promise<T> };
 
-function getEndDate(config: CountdownConfig): Date {
-  if (config.to) {
-    return typeof config.to === 'string'
-      ? new Date(config.to)
-      : config.to;
-  } else {
-    const duration: Duration = typeof config.for === 'string'
-      ? parse(config.for)
-      : config.for;
-    return end(duration);
+function getEndDate(config: Date | string | Duration): Date {
+  if (config instanceof Date) return config;
+  if (typeof config === 'string') {
+    return pattern.test(config) ? end(parse(config)) : new Date(config);
   }
+  return end(config);
 }
 
 interface Bucket {
@@ -32,10 +23,10 @@ interface Bucket {
 }
 
 // Sorted buckets by end time, earliest first
-function getBuckets(config: CountdownConfig, endDate: Date): Bucket[] {
+function getBuckets(config: CountdownConfig, to: Date | string | Duration): Bucket[] {
+  const endDate = getEndDate(to);
   const endTime = endDate.getTime();
   return Object.keys(config)
-    .filter(key => !['for', 'to'].includes(key))
     .map(key => {
       return {
         endAt: new Date(endTime - toSeconds(parse(key)) * 1000),
@@ -100,9 +91,7 @@ function runCountdown(buckets: Bucket[], fn: Action): CancellablePromise {
   return { cancel, done: execute() };
 }
 
-export function countdown(config: CountdownConfig, fn: Action): CancellablePromise {
-  const endDate = getEndDate(config);
-  const buckets = getBuckets(config, endDate);
+export function countdown(endTime: Date | string | Duration, config: CountdownConfig, fn: Action): CancellablePromise {
+  const buckets = getBuckets(config, endTime);
   return runCountdown(buckets, fn);
 }
-
