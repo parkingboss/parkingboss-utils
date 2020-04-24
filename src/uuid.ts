@@ -77,6 +77,11 @@ export function parse(input: string): Uuid | null {
   return uuid(input);
 }
 
+export function commonId(input: string): Uuid32 | null {
+  const parsed = parse(input);
+  return parsed && toUuid32(parsed);
+}
+
 export function withDashes(input: Uuid): Uuid {
   return input.replace(/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})/, '$1-$2-$3-$4-$5')
 }
