@@ -4,20 +4,33 @@ let status: string;
 let heading: number;
 let headingAccuracy: number;
 
+// For iOS
+interface WebKitCompass {
+    readonly webkitCompassHeading: number;
+    readonly webkitCompassAccuracy: number;
+}
+
 const store = writable({
     status: "uninitialized",
     orientation: {}
 })
 
-export async function requestPermission(): Promise<string> {  
+export async function requestPermission(): Promise<boolean> {  
+    let permission = "granted";
+    
+    // Perform permission check for iOS devices
     if (window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission === 'function') {
-        return await DeviceOrientationEvent.requestPermission()
+        permission = await DeviceOrientationEvent.requestPermission()
     }
+    
+    store.set({
+        status: `permission ${permission}`,
+        orientation: {
+            heading,
+            headingAccuracy
+        }
+    })
 
-    return "";
-}
-
-export async function isPermitted(permission: string) {
     return permission === "granted";
 }
 
@@ -60,29 +73,31 @@ function _computeCompassHeading(alpha: number, beta: number, gamma: number) {
 }
 ​
 function onDeviceOrientation(e: DeviceOrientationEvent) {
-    if (e.webkitCompassHeading !== undefined) {
-        if (e.webkitCompassAccuracy < 50) {
-            heading = e.webkitCompassHeading!;
-            headingAccuracy = e.webkitCompassAccuracy;
+    const event = e as DeviceOrientationEvent & WebKitCompass;
+
+    if (event.webkitCompassHeading !== undefined) {
+        if (event.webkitCompassAccuracy < 50) {
+            heading = event.webkitCompassHeading!;
+            headingAccuracy = event.webkitCompassAccuracy;
             status = "oriented";
         } else {
-            console.warn(`webkitCompassAccuracy is ${e.webkitCompassAccuracy}`);
+            console.warn(`webkitCompassAccuracy is ${event.webkitCompassAccuracy}`);
         }
-    } else if (e.gamma !== null) {
-        if (e.absolute === true || e.absolute === undefined) {
-            heading = _computeCompassHeading(e.alpha!, e.beta!, e.gamma!);
+    } else if (event.gamma !== null) {
+        if (event.absolute === true || event.absolute === undefined) {
+            heading = _computeCompassHeading(event.alpha!, event.beta!, event.gamma!);
             headingAccuracy = 10;
             status = "oriented";
 
             store.set({
-                status: "oriented",
+                status,
                 orientation: {
                     heading,
                     headingAccuracy
                 }
             });
         } else {
-            console.warn('event.absolute === false');
+            console.warn('e.absolute === false');
         }
     } else {
         console.warn('event.gamma === null');
