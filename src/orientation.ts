@@ -1,8 +1,4 @@
-import { writable } from 'svelte/store'
-
-let status: string;
-let heading: number;
-let headingAccuracy: number;
+import { writable } from "svelte/store";
 
 // For iOS
 interface WebKitCompass {
@@ -10,10 +6,40 @@ interface WebKitCompass {
     readonly webkitCompassAccuracy: number;
 }
 
-const store = writable({
-    status: "uninitialized",
-    orientation: {}
-})
+export interface OrientationState {
+  status: string;
+  heading: number | undefined;
+  headingAccuracy: number | undefined;   
+}
+
+const initialState: OrientationState = {
+  status: "uninitialized",
+  heading: undefined,
+  headingAccuracy: undefined
+};
+
+export const store = writable(initialState);
+
+function setStatus(status: string) {
+    store.update((state: OrientationState) => {
+        state.status = status;
+        return state;
+    })
+};
+
+function setHeading(heading: number | undefined) {
+    store.update((state: OrientationState) => {
+        state.heading = heading;
+        return state;
+    })
+};
+
+function setHeadingAccuracy(headingAccuracy: number | undefined) {
+    store.update((state: OrientationState) => {
+        state.headingAccuracy = headingAccuracy;
+        return state;
+    })
+};
 
 export async function requestPermission(): Promise<boolean> {  
     let permission = "granted";
@@ -22,21 +48,14 @@ export async function requestPermission(): Promise<boolean> {
     if (window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission === 'function') {
         permission = await DeviceOrientationEvent.requestPermission()
     }
-    
-    store.set({
-        status: `permission ${permission}`,
-        orientation: {
-            heading,
-            headingAccuracy
-        }
-    })
 
+    setStatus(`permission ${permission}`);
     return permission === "granted";
 }
 
 export function start() {
-    const listener = window.addEventListener("deviceorientation", onDeviceOrientation, false);
-    return () => window.removeEventListener('deviceorientation', onDeviceOrientation, false);
+    setStatus("initialized");
+    window.addEventListener("deviceorientationabsolute", onDeviceOrientation, false);
 }
 ​
 function _computeCompassHeading(alpha: number, beta: number, gamma: number) {
@@ -74,42 +93,19 @@ function _computeCompassHeading(alpha: number, beta: number, gamma: number) {
 ​
 function onDeviceOrientation(e: DeviceOrientationEvent) {
     const event = e as DeviceOrientationEvent & WebKitCompass;
+    setStatus("oriented");
 
     if (event.webkitCompassHeading !== undefined) {
         if (event.webkitCompassAccuracy < 50) {
-            heading = event.webkitCompassHeading!;
-            headingAccuracy = event.webkitCompassAccuracy;
-            status = "oriented";
+            setHeading(event.webkitCompassHeading);
+            setHeadingAccuracy(event.webkitCompassAccuracy);
         } else {
             console.warn(`webkitCompassAccuracy is ${event.webkitCompassAccuracy}`);
         }
     } else if (event.gamma !== null) {
-        if (event.absolute === true || event.absolute === undefined) {
-            heading = _computeCompassHeading(event.alpha!, event.beta!, event.gamma!);
-            headingAccuracy = 10;
-            status = "oriented";
-
-            store.set({
-                status,
-                orientation: {
-                    heading,
-                    headingAccuracy
-                }
-            });
-        } else {
-            console.warn('e.absolute === false');
-        }
+        setHeading(_computeCompassHeading(event.alpha!, event.beta!, event.gamma!));
+        setHeadingAccuracy(10);
     } else {
         console.warn('event.gamma === null');
     }
-}
-​
-export const current = function() {
-    return {
-        status, 
-        orientation: {
-            heading,
-            headingAccuracy,
-        }
-    };
 }

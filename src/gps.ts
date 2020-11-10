@@ -18,7 +18,7 @@ export async function isPermitted(opts?: PositionOptions) {
   }
 }
 
-export function position(opts: PositionOptions) {
+export function position(opts?: PositionOptions) {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, opts);
   });
