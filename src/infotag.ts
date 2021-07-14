@@ -108,7 +108,7 @@ function extractV0(uri: string, querystring: URLSearchParams): Infotag | null {
   if (!!query.p) return {
     ref: "permit",
     format: "pass",
-    id: query.permit as string
+    id: query.p as string
   };
   if (!!query.permit) return {
     ref: "permit",
