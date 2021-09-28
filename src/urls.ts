@@ -1,30 +1,29 @@
 export interface URLToPathOpts {
-  skipHash?: boolean,
-  absolute?: boolean,
+  skipHash?: boolean;
+  absolute?: boolean;
 }
 
 function urlToPath(url: URL, opts: URLToPathOpts = {}) {
   const copied = new URL(url.href);
 
   if (opts.skipHash) {
-    copied.hash = '';
+    copied.hash = "";
   }
 
   // Reminder: replace only replaces the first copy unless the first argument is a global regex
-  return copied.href.replace(copied.origin, opts.absolute ? copied.origin : '');
+  return copied.href.replace(copied.origin, opts.absolute ? copied.origin : "");
 }
 
 export interface UrlOpts {
   query?: Record<string, null | string | string[]>;
   hash?: string | false;
   absolute?: true;
-  login?: true;
 }
 
 export type UrlLike = string | URL | Location;
 
 function isUrlLike(x: any): x is UrlLike {
-  return (typeof x == 'string') || (x instanceof URL) || (x instanceof Location);
+  return typeof x == "string" || x instanceof URL || x instanceof Location;
 }
 
 export function build(url: UrlLike): string;
@@ -35,33 +34,40 @@ export function build(urlOrOpt: UrlLike | UrlOpts, maybeOpt?: UrlOpts): string {
   const opts: UrlOpts = maybeOpt || (isUrlLike(urlOrOpt) ? {} : urlOrOpt);
   const url = new URL(urlArg.toString(), document.baseURI);
 
-  Object.entries(opts.query || {})
-    .forEach(([key, val]) => {
-      if (val) {
-        (Array.isArray(val) ? val : [ val ]).forEach((v, ix) => {
-          if (ix == 0) {
-            url.searchParams.set(key, v);
-          } else {
-            url.searchParams.append(key, v);
-          }
-        });
-      } else {
-        url.searchParams.delete(key);
-      }
-    });
+  Object.entries(opts.query || {}).forEach(([key, val]) => {
+    if (val) {
+      (Array.isArray(val) ? val : [val]).forEach((v, ix) => {
+        if (ix == 0) {
+          url.searchParams.set(key, v);
+        } else {
+          url.searchParams.append(key, v);
+        }
+      });
+    } else {
+      url.searchParams.delete(key);
+    }
+  });
 
   if (opts.hash) {
     url.hash = opts.hash;
   }
 
-  const requestedPath = urlToPath(url, { skipHash: opts.hash === false, absolute: opts.login || opts.absolute });
+  return urlToPath(url, { skipHash: opts.hash === false, absolute: opts.absolute });
+}
 
-  if (opts.login) {
-    return build('https://my.parkingboss.com/user/navigate', {
-      query: { url: requestedPath },
-      absolute: true,
-    });
-  }
+export interface LoginUrlParams {
+  clientId: string;
+  email?: string;
+  redirectUrl?: string;
+}
 
-  return requestedPath;
+export function buildLoginUrl({ clientId, email, redirectUrl }: LoginUrlParams) {
+  return build("https://auth.communityboss.app/login", {
+    query: {
+      client_id: clientId,
+      login_hint: email || null,
+      redirect_uri: redirectUrl || location.href,
+    },
+    absolute: true,
+  });
 }
