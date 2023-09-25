@@ -9,6 +9,7 @@ export interface Infotag {
   serial?: string;
   version?: string;
   id?: string;
+  uuid?: string;
 }
 
 // convert crockford32 ids to guid hex
@@ -187,7 +188,8 @@ function extractV1(path: string): Infotag | null {
       format: formats[parts[3]] || parts[3],
       serial: parts[2],
       version: parts[0],
-      id: normalizeID(parts[1])
+      id: parts[1],
+      uuid: normalizeID(parts[1])
     };
   }
 
